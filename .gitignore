@@ -1,0 +1,14 @@
+# Root-level
+node_modules
+.env
+
+# API folder
+/api/node_modules
+/api/.env
+
+# Client folder
+/client/node_modules
+/client/.env
+
+# Vite build
+/client/dist
