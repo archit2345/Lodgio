@@ -26,7 +26,11 @@ console.log(process.env.MONGO_URL);
 app.use(express.json());
 app.use(cookieParser());
 app.use("/uploads", express.static(__dirname + "/uploads"));
-const allowedOrigins = ["http://localhost:5173", "http://localhost:3000"];
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:3000",
+  "https://lodgio.vercel.app/",
+];
 
 app.use(
   cors({
@@ -90,8 +94,8 @@ app.post("/api/login", async (req, res) => {
           res
             .cookie("token", token, {
               httpOnly: true,
-              sameSite: "lax", // NOT "None" if you're on localhost
-              secure: false, // true only if HTTPS
+              sameSite: "None", // REQUIRED for cross-site cookies
+              secure: true, // REQUIRED since Render uses HTTPS
             })
             .json(userDoc);
         }
@@ -151,8 +155,8 @@ app.post("/api/logout", (req, res) => {
   res
     .cookie("token", "", {
       httpOnly: true,
-      sameSite: "lax",
-      secure: false,
+      sameSite: "None",
+      secure: true,
     })
     .json(true);
 });
