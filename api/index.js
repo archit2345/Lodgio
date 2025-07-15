@@ -29,7 +29,7 @@ app.use("/uploads", express.static(__dirname + "/uploads"));
 const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:3000",
-  "https://lodgio.vercel.app/",
+  "https://lodgio.vercel.app",
 ];
 
 app.use(
