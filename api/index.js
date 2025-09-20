@@ -315,6 +315,29 @@ app.post("/api/bookings", async (req, res) => {
       user: userData.id,
     });
 
+    const placeDoc = await Place.findById(place);
+    if (placeDoc.owner.toString() === userData.id) {
+      return res
+        .status(403)
+        .json({ error: "You cannot book your own listing." });
+    }
+
+    const overlappingBooking = await Booking.findOne({
+      place,
+      $or: [
+        {
+          checkIn: { $lt: new Date(checkOut) },
+          checkOut: { $gt: new Date(checkIn) },
+        },
+      ],
+    });
+
+    if (overlappingBooking) {
+      return res
+        .status(409)
+        .json({ error: "This listing is already booked for these dates." });
+    }
+
     res.json(booking);
   } catch (err) {
     res.status(500).json({ error: "Booking failed", details: err });
